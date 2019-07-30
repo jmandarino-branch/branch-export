@@ -9,6 +9,8 @@ To download data from the Branch DB and convert it into a format that the custom
 2. populate `settings.json`
 3. run script `./main.py` or `/path/to/python main.py`
 
+*This script will only run on python 2.7*
+
 ## settings.json
 
 The `settings.json` file stores all the global information that the script uses to run. It will look like this:
