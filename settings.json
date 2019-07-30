@@ -1,0 +1,11 @@
+{
+  "input_folder": "input",
+  "output_folder": "output",
+  "input_file": "input.csv",
+  "output_file": "output.csv",
+  "default_timezone": "UTC",
+  "output_timezone":"Asia/Seoul",
+  "custom_column_headers": ["title_id","title_name","genre_type","episode_no","purchase_type","purchase_quantity","purchase_list"],
+  "app_id": 619458676142395401
+
+}
