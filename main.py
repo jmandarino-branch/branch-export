@@ -4,6 +4,7 @@ import errno
 import datetime
 import json
 import os
+import re
 import sys
 
 from collections import OrderedDict
@@ -89,6 +90,25 @@ def get_db_data(selected_columns, app_id, y, m, d):
     return pd.read_sql(query_string, con=dfs)
 
 
+def escape_single_quotes(custom_data):
+    """edit the title_name of the custom_data columns dictionary
+
+    :param custom_data: a dictionary of data from the custom_data
+    :return: edited custom data
+    """
+    # https://stackoverflow.com/questions/10569438/how-to-print-unicode-character-in-python
+    # https://regex101.com/r/nM4bXf/1
+
+    print(custom_data)
+    print(custom_data.get('title_name', None))
+    if re.search("(?<!u)'(?!:|}|,)", custom_data.get('title_name', None)):
+        z = re.sub(r"(?<!u)'(?!:|}|,)", '\\\'', custom_data.get('title_name', None))
+
+        custom_data['title_name'] = z
+        return custom_data
+    return custom_data
+
+
 def dataframe_to_csv(settings, dataframe):
     """Take a Pandas dataframe and export it to CSV
 
@@ -98,7 +118,8 @@ def dataframe_to_csv(settings, dataframe):
     """
     if not os.path.exists(settings.input_file_path):
         raise IOError("'input_file_path' not defined in settings object")
-    dataframe.to_csv(settings.input_file_path, header=True, index=False, encoding='utf-8')
+    dataframe['custom_data'].apply(escape_single_quotes)
+    dataframe.to_csv(settings.input_file_path, header=True, encoding='utf-8', index=False)
 
 
 def parse_csv(settings):
@@ -181,7 +202,7 @@ if __name__ == '__main__':
             'first_event_for_user', 'user_data_aaid', 'user_data_idfa', 'user_data_idfv', 'custom_data',
             'last_attributed_touch_type', 'last_attributed_touch_data_custom_fields']
     # get data from DB
-    dataframe = get_db_data(cols, settings_obj.app_id, 2019, 7, 26)
+    dataframe = get_db_data(cols, settings_obj.app_id, 2019, 8, 3)
     # convert to CSV
     dataframe_to_csv(settings_obj, dataframe)
     # parse csv and write to file
