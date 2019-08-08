@@ -98,7 +98,7 @@ def escape_single_quotes(custom_data):
     """
     # https://stackoverflow.com/questions/10569438/how-to-print-unicode-character-in-python
     # https://regex101.com/r/nM4bXf/1
-    if re.search("(?<!u)'(?!:|}|,)", custom_data.get('title_name', None)):
+    if re.search("(?<!u)'(?!:|}|,)", custom_data.get('title_name', '')):
         z = re.sub(r"(?<!u)'(?!:|}|,)", '\\\'', custom_data.get('title_name', None))
 
         custom_data['title_name'] = z
